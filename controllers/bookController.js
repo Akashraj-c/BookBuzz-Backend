@@ -1,4 +1,4 @@
-const books = require('../model/bookModel')
+const books = require('../model/bookModel');
 
 // Adding Books
 exports.addBookController = async (req, res) => {
@@ -16,7 +16,7 @@ exports.addBookController = async (req, res) => {
         }
         else {
             const newBook = new books({
-                title, author, description, imageurl
+                title, author, description, imageurl, userid: email
             })
             await newBook.save()
             res.status(200).json(newBook)
@@ -28,8 +28,11 @@ exports.addBookController = async (req, res) => {
 
 // Get All Books
 exports.getAllBookController = async (req, res) => {
+    const searchKey = req.query.search
+    console.log(searchKey);
+
     try {
-        const allBooks = await books.find().sort({ _id: -1 })
+        const allBooks = await books.find({title:{$regex:searchKey, $options:"i"} }).sort({ _id: -1 })
         res.status(200).json(allBooks)
     } catch (error) {
         res.status(500).json(error)
@@ -38,7 +41,7 @@ exports.getAllBookController = async (req, res) => {
 
 // Get A Book Details
 exports.getABookController = async (req, res) => {
-    const {id} = req.params
+    const { id } = req.params
     console.log(id);
 
     try {
