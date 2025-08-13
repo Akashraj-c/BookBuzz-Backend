@@ -6,7 +6,7 @@ const jwtMiddleWare = async (req, res, next) => {
     console.log(token);
 
     try {
-        const jwtVerify = jwt.verify(token, 'secretKey')
+        const jwtVerify = jwt.verify(token,process.env.SECRETKEY)
         console.log(jwtVerify);
         req.payload = jwtVerify.userMail
         next()
